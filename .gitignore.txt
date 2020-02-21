@@ -1,5 +1,1 @@
-.DS_Store
-test.py
-target
-.aws-sam
-.idea
+
