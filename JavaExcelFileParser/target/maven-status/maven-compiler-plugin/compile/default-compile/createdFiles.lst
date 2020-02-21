@@ -1,0 +1,6 @@
+com/amazonaws/utils/GatewayResponse.class
+com/amazonaws/models/response/FileParserHandlerResponse.class
+com/amazonaws/handlers/FileParserHandler.class
+com/amazonaws/utils/StatusCode.class
+com/amazonaws/models/requests/FileParserHandlerRequest.class
+com/amazonaws/handlers/ApiHandler.class
