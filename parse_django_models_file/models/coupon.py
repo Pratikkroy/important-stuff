@@ -1,0 +1,35 @@
+class Coupon(models.Model):
+    coupon_id = models.BigAutoField(primary_key=True)
+    coupon_title = models.CharField(max_length=245, blank=True, null=True)
+    coupon_code = models.CharField(max_length=245, blank=True, null=True)
+    discount_price = models.FloatField(blank=True, null=True)
+    type = models.CharField(max_length=45, blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+    activation_days = models.IntegerField(blank=True, null=True)
+    max_coupon_use = models.IntegerField(blank=True, null=True)
+    coupon_message = models.TextField(blank=True, null=True)
+    is_active = models.CharField(max_length=3, blank=True, null=True)
+    create_time = models.DateTimeField(blank=True, null=True)
+    update_time = models.DateTimeField(blank=True, null=True)
+    created_by = models.CharField(max_length=145, blank=True, null=True)
+    updated_by = models.CharField(max_length=145, blank=True, null=True)
+    coupon_category_id = models.CharField(max_length=45, blank=True, null=True)
+    is_redeem = models.CharField(max_length=3, blank=True, null=True)
+    coupon_channel = models.CharField(max_length=7, blank=True, null=True)
+    customer_category = models.TextField(blank=True, null=True)
+    customer_subcategory = models.TextField(blank=True, null=True)
+    min_workouts = models.IntegerField(blank=True, null=True)
+    coupon_type = models.CharField(max_length=245, blank=True, null=True)
+    team_zone_name = models.CharField(max_length=245, blank=True, null=True)
+    min_order_amount = models.FloatField(blank=True, null=True)
+    coupon_description = models.TextField(blank=True, null=True)
+    fitpass_discount = models.FloatField(blank=True, null=True)
+    franchise_discount = models.FloatField(blank=True, null=True)
+    membership_type = models.CharField(max_length=245, blank=True, null=True)
+    user_id = models.CharField(max_length=45, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'fitpass_coupon'
+

@@ -1,0 +1,50 @@
+class UserReservedSchedules(models.Model):
+    user_schedule_id = models.BigAutoField(primary_key=True)
+    workout_date = models.DateField(blank=True, null=True)
+    security_code = models.CharField(max_length=10, blank=True, null=True)
+    workout_status = models.IntegerField(blank=True, null=True)
+    studio = models.ForeignKey('Studios', models.DO_NOTHING)
+    workout = models.ForeignKey('Workouts', models.DO_NOTHING)
+    workout_time = models.ForeignKey('WorkoutSchedules', models.DO_NOTHING)
+    reserve_source = models.CharField(max_length=45, blank=True, null=True)
+    user_schedule_old_id = models.CharField(max_length=45, blank=True, null=True)
+    created_by = models.CharField(max_length=145, blank=True, null=True)
+    updated_by = models.CharField(max_length=145, blank=True, null=True)
+    create_time = models.DateTimeField(blank=True, null=True)
+    update_time = models.DateTimeField(blank=True, null=True)
+    user = models.ForeignKey('Users', models.DO_NOTHING)
+    feedback_summary = models.TextField(blank=True, null=True)
+    studio_payment = models.FloatField(blank=True, null=True)
+    workout_time_0 = models.CharField(db_column='workout_time', max_length=45, blank=True,
+                                      null=True)  # Field renamed because of name conflict.
+    workout_name = models.CharField(max_length=245, blank=True, null=True)
+    app_version = models.CharField(max_length=45, blank=True, null=True)
+    device_name = models.CharField(max_length=45, blank=True, null=True)
+    device_type = models.CharField(max_length=45, blank=True, null=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    workout_activity_id = models.IntegerField(blank=True, null=True)
+    user_rating = models.TextField(blank=True, null=True)
+    workout_cancel_by = models.CharField(max_length=245, blank=True, null=True)
+    urc_updated_by = models.CharField(max_length=245, blank=True, null=True)
+    workout_cancel_time = models.DateTimeField(blank=True, null=True)
+    urc_updated_time = models.DateTimeField(blank=True, null=True)
+    team_zone_name = models.CharField(max_length=45, blank=True, null=True)
+    workout_reserve_source = models.TextField(blank=True, null=True)
+    studio_zone = models.CharField(max_length=245, blank=True, null=True)
+    user_type = models.IntegerField(blank=True, null=True)
+    corporate_id = models.IntegerField(blank=True, null=True)
+    workout_cancel_status = models.CharField(max_length=3, blank=True, null=True)
+    studio_with_group_id = models.IntegerField(blank=True, null=True)
+    conflicting_time = models.CharField(max_length=3, blank=True, null=True)
+    conflicting_message = models.TextField(blank=True, null=True)
+    conflicting_trying_to_attend = models.DateTimeField(blank=True, null=True)
+    studio_qr_code_number = models.CharField(max_length=45, blank=True, null=True)
+    user_current_cycle = models.DateField(blank=True, null=True)
+    task_management = models.ForeignKey('TaskManagement', models.DO_NOTHING, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'fitpass_user_reserved_schedules'
+
+

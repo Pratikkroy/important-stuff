@@ -1,0 +1,41 @@
+class WorkoutSchedules(models.Model):
+    workout_time_id = models.BigAutoField(primary_key=True)
+    number_of_seats = models.IntegerField(blank=True, null=True)
+    start_time = models.CharField(max_length=6, blank=True, null=True)
+    end_time = models.CharField(max_length=6, blank=True, null=True)
+    workout_days = models.CharField(max_length=20, blank=True, null=True)
+    is_active = models.CharField(max_length=3, blank=True, null=True)
+    created_by = models.CharField(max_length=145, blank=True, null=True)
+    updated_by = models.CharField(max_length=145, blank=True, null=True)
+    create_time = models.DateTimeField(blank=True, null=True)
+    update_time = models.DateTimeField(blank=True, null=True)
+    workout = models.ForeignKey('Workouts', models.DO_NOTHING)
+    studio = models.ForeignKey('Studios', models.DO_NOTHING)
+    workout_batch_old_id = models.BigIntegerField(blank=True, null=True)
+    is_deleted = models.CharField(max_length=3, blank=True, null=True)
+    deleted_date = models.DateTimeField(blank=True, null=True)
+    schedule_specific_days = models.CharField(max_length=45, blank=True, null=True)
+    team_zone_name = models.CharField(max_length=245, blank=True, null=True)
+    time_type = models.IntegerField(blank=True, null=True)
+    schedule_active_from = models.DateField(blank=True, null=True)
+    schedule_active_to = models.DateField(blank=True, null=True)
+    last_activity_role = models.TextField(blank=True, null=True)
+    device_id = models.TextField(blank=True, null=True)
+    device_type = models.TextField(blank=True, null=True)
+    information_need_update = models.TextField(blank=True, null=True)
+    workout_reserve_type = models.CharField(max_length=5, blank=True, null=True)
+    workout_reserve_value = models.IntegerField(blank=True, null=True)
+    upcoming_activity_startdate = models.DateField(blank=True, null=True)
+    upcoming_start_time = models.CharField(max_length=6, blank=True, null=True)
+    upcoming_end_time = models.CharField(max_length=6, blank=True, null=True)
+    upcoming_workout_days = models.CharField(max_length=20, blank=True, null=True)
+    upcoming_number_of_seats = models.IntegerField(blank=True, null=True)
+    upcoming_schedule_specific_days = models.CharField(max_length=45, blank=True, null=True)
+    upcoming_activity_complete = models.CharField(max_length=3, blank=True, null=True)
+    last_update_history = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'fitpass_workout_schedules'
+
+

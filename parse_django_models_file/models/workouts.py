@@ -1,0 +1,37 @@
+class Workouts(models.Model):
+    workout_id = models.BigAutoField(primary_key=True)
+    workout_name = models.CharField(max_length=245, blank=True, null=True)
+    cost_per_user_per_workout = models.IntegerField(blank=True, null=True)
+    no_of_seats_per_workout = models.IntegerField(blank=True, null=True)
+    workout_description = models.TextField(blank=True, null=True)
+    workout_image = models.TextField(blank=True, null=True)
+    workout_seo_url = models.TextField(blank=True, null=True)
+    seo_zone_url = models.TextField(blank=True, null=True)
+    seo_locality_url = models.TextField(blank=True, null=True)
+    workout_meta_keyword = models.TextField(blank=True, null=True)
+    workout_meta_description = models.TextField(blank=True, null=True)
+    created_by = models.CharField(max_length=145, blank=True, null=True)
+    updated_by = models.CharField(max_length=145, blank=True, null=True)
+    create_time = models.DateTimeField(blank=True, null=True)
+    update_time = models.DateTimeField(blank=True, null=True)
+    is_active = models.CharField(max_length=3, blank=True, null=True)
+    is_batch_created = models.CharField(max_length=3, blank=True, null=True)
+    old_workout_id = models.BigIntegerField(blank=True, null=True)
+    studio = models.ForeignKey(Studios, models.DO_NOTHING)
+    workout_activity = models.ForeignKey(WorkoutActivities, models.DO_NOTHING)
+    is_deleted = models.CharField(max_length=3, blank=True, null=True)
+    team_zone_name = models.CharField(max_length=245, blank=True, null=True)
+    workout_available_days = models.CharField(max_length=245, blank=True, null=True)
+    workout_available_time = models.CharField(max_length=245, blank=True, null=True)
+    device_id = models.TextField(blank=True, null=True)
+    last_activity_role = models.TextField(blank=True, null=True)
+    device_type = models.TextField(blank=True, null=True)
+    workout_active_from = models.DateField(blank=True, null=True)
+    workout_active_to = models.DateField(blank=True, null=True)
+    information_need_update = models.TextField(blank=True, null=True)
+    ladies_workout = models.CharField(max_length=3, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table =  'fitpass_workouts'
+
