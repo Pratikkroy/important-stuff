@@ -94,3 +94,14 @@ typings/
 # Electron-Forge
 out/
 
+#vscode
+.vscode
+
+#python
+__pycache__
+__pycache__/
+migrations/
+
+#django
+settings.py
+settings/
