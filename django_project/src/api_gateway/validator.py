@@ -34,21 +34,18 @@ class JSONSchemaValidator:
             # print("path", validation_error.path)
 
             try:
-                return HttpResponse.http_response(
-                    status_code=None,
-                    message=HttpStatus.HTTP_409_CONFLICT['message'],
-                    body={
+                return HttpResponse(
+                    http_status=HttpStatus.HTTP_409_CONFLICT,
+                    data={
                         'validationError': validation_error.validator,
                         'absoluteSchemaPath': list(validation_error.absolute_schema_path),
-                        'absolutePath': list(validation_error.absolute_path),
-                        
+                        'absolutePath': list(validation_error.absolute_path),                        
                     }
                 )
 
             except Exception:
                 traceback.print_exc()
-                return HttpResponse.http_response(
-                    status_code=HttpStatus.HTTP_500_INTERNAL_SERVER_ERROR['status'],
-                    message=HttpStatus.HTTP_500_INTERNAL_SERVER_ERROR['status'],
-                    body='JSON_VALIDATION_ERROR'
+                return HttpResponse(
+                    http_status=HttpStatus.HTTP_500_INTERNAL_SERVER_ERROR,
+                    data='JSON_VALIDATION_ERROR'
                 )

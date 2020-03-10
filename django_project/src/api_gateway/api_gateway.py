@@ -14,21 +14,21 @@ class ApiGatewayService:
         raise ClassShouldNotInstantiateException
 
     @staticmethod
-    def authorize_with_api_key(self, api_key):
+    def authorize_with_api_key( api_key):
         pass
 
     @staticmethod
-    def validate_request_header(self, json_schema, header):
+    def validate_request_header( json_schema, header):
         pass
 
     @staticmethod
-    def validate_request_body(self, json_schema, body):
+    def validate_request_body( json_schema, body):
         return JSONSchemaValidator.validate_json(json_schema, body)
 
     @staticmethod
-    def validate_request_query_params(self,json_schema, query_params):
+    def validate_request_query_params(json_schema, query_params):
         pass
     
     staticmethod
-    def parse_request_data(self, parser):
+    def parse_request_data( parser):
         pass
