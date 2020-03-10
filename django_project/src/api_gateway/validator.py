@@ -1,28 +1,28 @@
+import traceback
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError
+from ..utils import HttpStatus, HttpResponse, ClassShouldNotInstantiateException
 
-from ..utils.status import Status
 
 
 class JSONSchemaValidator:
 
     def __init__(self, *args, **kwargs):
-        pass
-
-    def validate_json(self, json_schema, json_data):
+        raise ClassShouldNotInstantiateException
+    
+    @staticmethod
+    def validate_json(json_schema, json_data):
         '''
         this method will return 
-        status = 400 when a required attribute from json_schema is not present in json_data
-        status = 412 when a required attribute from json_schema is not satisfying any condition 
-                defined in the properties key in json schema
-
+        status = 409 when the json_data is invalid against the provide json schema
         return None when all the required properties are present and valid
         '''
         try:
             validate(instance=json_data, schema=json_schema)
+            return None
         except ValidationError as validation_error:
-
             # below commented lines are kept for testing purpose
+            # print("ValidationError .... ",validation_error)
             # print("absolute_path", validation_error.absolute_path)
             # print("absolute_schema_path", validation_error.absolute_schema_path)
             # print("relative_path", validation_error.relative_path)
@@ -34,53 +34,21 @@ class JSONSchemaValidator:
             # print("path", validation_error.path)
 
             try:
+                return HttpResponse.http_response(
+                    status_code=None,
+                    message=HttpStatus.HTTP_409_CONFLICT['message'],
+                    body={
+                        'validationError': validation_error.validator,
+                        'absoluteSchemaPath': list(validation_error.absolute_schema_path),
+                        'absolutePath': list(validation_error.absolute_path),
+                        
+                    }
+                )
 
-                # one or many required properties are missing
-                if validation_error.validator == 'required':
-
-                    # when there is only one required properties
-                    if len(validation_error.absolute_schema_path) == 1:
-                        required_properties = json_schema.get('required')
-
-                    # when there are more than one required properties
-                    else:
-                        schema_path, properties_list_index, properties_list_key = validation_error.absolute_schema_path
-                        required_properties = json_schema.get(
-                            schema_path)[properties_list_index].get(properties_list_key)
-
-                    for properties in required_properties:
-                        # check if this property is present in json data
-                        if json_data.get(properties) is None:
-                            status = Status()
-                            response = status.HTTP_400_BAD_REQUEST
-                            response.update({
-                                'message': properties.upper()+'_REQUIRED'
-                            })
-                            return response
-
-                # json_data does not match any of the given required properties
-                elif validation_error.validator == 'oneOf':
-                    status = Status()
-                    response = status.HTTP_400_BAD_REQUEST
-                    response.update({
-                        'message': 'REQUEST_BODY_INVALID'
-                    })
-                    return response
-
-                # required properties are present but properties are not valid
-                else:
-                    status = Status()
-                    response = status.HTTP_412_PRECONDITION_FAILED
-                    response.update({
-                        'message': validation_error.path[0].upper()+'_INVALID'
-                    })
-                    return response
-
-            except:
-                status = Status()
-                response = status.HTTP_400_BAD_REQUEST
-                response.update({
-                    'message': 'JSON_VALIDATION_ERROR'
-                })
-                return response
-        return None
+            except Exception:
+                traceback.print_exc()
+                return HttpResponse.http_response(
+                    status_code=HttpStatus.HTTP_500_INTERNAL_SERVER_ERROR['status'],
+                    message=HttpStatus.HTTP_500_INTERNAL_SERVER_ERROR['status'],
+                    body='JSON_VALIDATION_ERROR'
+                )
