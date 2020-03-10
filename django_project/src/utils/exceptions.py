@@ -5,3 +5,6 @@ class HttpResponseBadFormatException(Exception):
 class ClassShouldNotInstantiateException(Exception):
     ''' Class should not be instantiated '''
     pass
+
+class MethodNotAllowedException(Exception):
+    ''' Method is not allowed'''
