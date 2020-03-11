@@ -36,12 +36,16 @@ def validate_sys_args():
 def convert_model_file_to_directory():
     if validate_sys_args():
         create_new_dir(os.path.join(os.getcwd(),DIR_NAME))
+        # create init file
+        init_file_name = os.path.join(os.path.join(os.getcwd(), DIR_NAME), '__init__.py')
+        init_file = open(init_file_name,'w')
+        print('New file created:: '+init_file_name)
         input_file = sys.argv[1]
-        parse_file(input_file, DIR_NAME)
+        parse_file(input_file, DIR_NAME, init_file)
     
         
     
-def parse_file(input_file, dir_name):
+def parse_file(input_file, dir_name, init_file):
     try:
         input_file = open(input_file,'r')
     except:
@@ -64,13 +68,16 @@ def parse_file(input_file, dir_name):
             print('Error in creating new file')
             return
         else:
-            print("New file created:: "+new_file_name)
+            print('New file created:: '+new_file_name)
         
+        init_file.write('from .'+ new_file_name.split('/')[-1].split('.py')[0] +' import '+get_class_name(line)+'\n')
+        new_file.write('from django.db import models\n')
+        new_file.write('from . import *\n\n')
         new_file.write(line)
         class_count = 0    # for 'class Meta:' line
         for line in file_generator_obj:
             if line.strip().startswith('class'):
-                if class_count == 1:
+                if class_count == 1: 
                     break
                 else:    # for 'class Meta:' line
                     class_count += 1
@@ -97,7 +104,7 @@ def get_file_name(line):
     # example str 'class RolesModel(models.Model):'
     file_name = ''
     count = 0
-    for char in line.split('class')[1].strip().split('(')[0].strip():
+    for char in get_class_name(line):
         if char.isupper():
             if count == 0:
                 count += 1
@@ -107,7 +114,9 @@ def get_file_name(line):
     
     return file_name.lower()       
                 
-    
+def get_class_name(line):
+    # example str 'class RolesModel(models.Model):'
+    return line.split('class')[1].strip().split('(')[0].strip()
        
 def create_new_file(path, name):
     file = open(path+'/'+name,'w') 
