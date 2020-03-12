@@ -3,7 +3,6 @@ from django.utils.decorators import decorator_from_middleware_with_args
 from src.utils import HttpStatus, HttpResponse, MethodNotAllowedException
 from middlewares.validator import RequestBodyValidatorMiddleware
 from ..validators.login import json_schema
-from apps.models import BlogsAuth, BlogsAuthUser, AuthPermission
 
 login_params_validator = decorator_from_middleware_with_args(RequestBodyValidatorMiddleware)
 
