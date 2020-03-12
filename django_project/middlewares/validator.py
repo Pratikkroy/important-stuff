@@ -1,7 +1,7 @@
 from django.utils.deprecation import MiddlewareMixin
 from src.api_gateway import ApiGatewayService
 
-class LoginMiddleware(MiddlewareMixin):
+class RequestBodyValidatorMiddleware(MiddlewareMixin):
     def __init__(self, json_schema):
         self.json_schema = json_schema
         
