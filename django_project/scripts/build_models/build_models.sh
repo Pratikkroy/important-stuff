@@ -1,4 +1,10 @@
 #!/bin/sh
+'''
+Tests
+1. delete apps/models/ and run the script
+2. run the script and choose yes
+2. run the script and choose no
+'''
 root=$HOME"/github/important-stuff/django_project"
 build_dir=$root"/scripts/build_models"
 final_dir=$root"/apps/models"
@@ -50,7 +56,7 @@ fi
 if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
     echo "moving models under apps ..."
     # mv $root"/scripts/build_models/models" $root"/apps/"
-    mv $build_dir"/models" $final_dir
+    cp -r $build_dir"/models/" $final_dir   # mv was giving error
     if [[ $? -ne 0 ]]; then
         echo "error while moving files under apps/models"
         exit 1
@@ -59,9 +65,9 @@ if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
     echo "Files Moved successfully"
 fi
 
-rm -r $build_dir"/models.py"
-if ! [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
-    rm -r $build_dir"/models" 
-fi
+rm -r $build_dir"/models.py" $build_dir"/models"
+# if ! [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
+#     rm -r $build_dir"/models" 
+# fi
 
 cd $root
