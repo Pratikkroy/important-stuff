@@ -1,10 +1,10 @@
 #!/bin/sh
-'''
-Tests
-1. delete apps/models/ and run the script
-2. run the script and choose yes
-2. run the script and choose no
-'''
+
+# Tests
+# 1. delete apps/models/ and run the script
+# 2. run the script and choose yes
+# 2. run the script and choose no
+
 root=$HOME"/github/important-stuff/django_project"
 build_dir=$root"/scripts/build_models"
 final_dir=$root"/apps/models"
