@@ -38,8 +38,9 @@ class JSONSchemaValidator:
                     http_status=HttpStatus.HTTP_409_CONFLICT,
                     data={
                         'validationError': validation_error.validator,
+                        'validationValue': list(validation_error.validator_value),
                         'absoluteSchemaPath': list(validation_error.absolute_schema_path),
-                        'absolutePath': list(validation_error.absolute_path),                        
+                        'absolutePath': list(validation_error.absolute_path),                   
                     }
                 )
 
