@@ -1,0 +1,1 @@
+from .blogs_auth import BlogsAuthSerializer
