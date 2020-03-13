@@ -1,28 +1,84 @@
-from accounts.models import BlogsAuth
-import logging
+from custom_auth_backend.models import BlogsAuth
+from src.utils import Logger,HttpStatus, HttpResponse
+from src.constants import LoginType
 
+logger = Logger()
+
+# To create Custom auth backend, use below link
+# https://www.pythoncircle.com/post/28/creating-custom-user-model-and-custom-authentication-in-django/
+# To use admin functionality like creating superuser, use below link
+# https://www.fomfus.com/articles/how-to-use-email-as-username-for-django-authentication-removing-the-username
+# While defining authenticate request param is mandatory for django-3.x
+# https://stackoverflow.com/a/59442029
 
 class BlogsAuthBackend(object):
-    def authenticate(self, email, password):    
-        try:
-            user = BlogsAuth.objects.get(email=email)
-            if user.check_password(password):
-                return user
-            else:
-                return None
-        except BlogsAuth.DoesNotExist:
-            logging.getLogger("error_logger").error("user with login %s does not exists " % login)
-            return None
-        except Exception as e:
-            logging.getLogger("error_logger").error(repr(e))
-            return None
+    # def authenticate(self, request, email, login_id_type, login_id, password):
+    #     # login_id could be email or phone
+    #     try:
+    #         if login_id_type == LoginIdType.EMAIL:
+    #             users = BlogsAuth.objects.filter(email=login_id)
+    #         else:
+    #             users = BlogsAuth.objects.filter(phone=login_id)
+    #         if users.count() == 0:
+    #             logger.error("user with login {} does not exists ".format(login_id))
+    #             return HttpResponse(http_status=HttpStatus.HTTP_401_UNAUTHORIZED,
+    #                 data="EMAIL_PHONE_DOES_NOT_EXIST")
+    #         elif users.count() == 1:
+    #             user = users[0]
+    #             if user.check_password(password):
+    #                 return user
+    #             else:
+    #                 return HttpResponse(http_status=HttpStatus.HTTP_401_UNAUTHORIZED,
+    #                     data="PASSWORD_INCORRECT")
+    #         else:
+    #             logger.error("More than one user with login {} exists ".format(login_id))
+    #             return HttpResponse(http_status=HttpStatus.HTTP_401_UNAUTHORIZED,
+    #                     data="MORE_THAN_ONE_USER_EXIST")      
+    #     except Exception as ex:
+    #         logger.exception(ex)
+    #         return None
 
+    # do not change the params. this authenticate method would not called
+    def authenticate(self, request, auth_id, password):
+        try:
+            login_type = request.data['loginType'].upper()
+            if login_type == LoginType.EMAIL:
+                login_id = request.data['email']
+                users = BlogsAuth.objects.filter(email=request.data['email'])
+            else:
+                login_id = request.data['phone']
+                users = BlogsAuth.objects.filter(phone=request.data['phone'])
+                
+            if users.count() == 0:
+                logger.error("user with login {} does not exists ".format(login_id))
+                return HttpResponse(http_status=HttpStatus.HTTP_401_UNAUTHORIZED,
+                    data="EMAIL_PHONE_DOES_NOT_EXIST")
+            elif users.count() == 1:
+                user = users[0]
+                if user.check_password(password):
+                    return user
+                else:
+                    return HttpResponse(http_status=HttpStatus.HTTP_401_UNAUTHORIZED,
+                        data="PASSWORD_INCORRECT")
+            else:
+                logger.error("More than one user with login {} exists ".format(login_id))
+                return HttpResponse(http_status=HttpStatus.HTTP_401_UNAUTHORIZED,
+                        data="MORE_THAN_ONE_USER_EXIST")  
+        except Exception as ex:
+            logger.exception(ex)
+            return None
+    
+    
     def get_user(self, auth_id):
         try:
             user = BlogsAuth.objects.get(auth_id=auth_id)
             if user.status == "ACTIVE":
                 return user
-            return None
+            return HttpResponse(http_status=HttpStatus.HTTP_401_UNAUTHORIZED,
+                        data="USER_INACTIVE")
         except BlogsAuth.DoesNotExist:
-            logging.getLogger("error_logger").error("user with %(auth_id)d not found")
+            logger.error("user with auth_id {} not found".format(auth_id))
             return None
+        
+    
+    
