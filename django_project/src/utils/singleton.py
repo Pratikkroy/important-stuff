@@ -7,10 +7,11 @@ class Singleton(object):
 
 
 
+
 '''
 A wrong method of implementing singleton class in python
 using __new__ is better because it is a static method.
-__new__ runs before the class is accessed(used or instance created) anywhere first time.
+__new__ runs before the class is accessed(instance created).
 
 class Singleton(type):
     _instances = {}
