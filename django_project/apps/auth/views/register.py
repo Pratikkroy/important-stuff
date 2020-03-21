@@ -4,7 +4,7 @@ from src.utils import HttpStatus, HttpResponse, MethodNotAllowedException, Utili
 from src.constants import UserStatus, UserGroups, Teams
 from custom_middlewares.validator import RequestBodyValidatorMiddleware
 from apps.json_schema_validators import register_json_schema
-from apps.serializers import BlogsAuthSerializer
+from apps.serializers import BlogsAuthSerializer, BlogsAuthUserSerializer
 from apps.models import BlogsAuthUser, BlogsAuth
 
 logger = Logger()
@@ -48,7 +48,7 @@ class Register(APIView):
                 # deleting the entry from blogs_auth table
                 logger.info("deleting the newly created auth obj {}".format(auth_obj))
                 BlogsAuth.objects.get(auth_id=auth_obj.auth_id).delete()
-                return HttpResponse(http_status=HttpStatus.HTTP_500_INTERNAL_SERVER_ERROR)
+                return HttpResponse(http_status=HttpStatus.HTTP_400_BAD_REQUEST)
         else:
             logger.error("serialization error {}".format(serializer.errors))
             return HttpResponse(http_status=HttpStatus.HTTP_400_BAD_REQUEST,
@@ -65,19 +65,23 @@ class Register(APIView):
     
        
     def create_user_entry_in_auth_user(self, auth_obj, name, group, team=None):
-        try:
-            BlogsAuthUser.objects.create(
-                username=self.create_username(name.get('first'),auth_obj.auth_id),
-                auth=auth_obj,
-                firstname=name.get('first'),
-                lastname=name.get('last'),
-                group=group,
-                team=team
-            )
+        serializer = BlogsAuthUserSerializer(
+            data={
+                'username': self.create_username(name.get('first'),auth_obj.auth_id),
+                'auth': auth_obj.auth_id,
+                'firstname': name.get('first'),
+                'lastname': name.get('last'),
+                'group': group,
+                'team': team
+            }
+        )
+        if serializer.is_valid():
+            serializer.save()
             return True
-        except Exception as ex:
-            logger.exception(ex)
+        else:
+            logger.error("serialization error {}".format(serializer.errors))
             return False
+        
         
     
     def create_username(self, name, auth_id):
