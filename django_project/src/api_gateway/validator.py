@@ -3,7 +3,10 @@ from jsonschema import validate
 from jsonschema.exceptions import ValidationError
 from ..utils import HttpStatus, HttpResponse, ClassShouldNotInstantiateException
 
-
+def encoder(data):
+    if isinstance(data,int) or isinstance(data,str):
+        return [data]
+    return list(data)
 
 class JSONSchemaValidator:
 
@@ -38,7 +41,7 @@ class JSONSchemaValidator:
                     http_status=HttpStatus.HTTP_409_CONFLICT,
                     data={
                         'validationError': validation_error.validator,
-                        'validationValue': list(validation_error.validator_value),
+                        'validationValue': encoder(validation_error.validator_value),
                         'absoluteSchemaPath': list(validation_error.absolute_schema_path),
                         'absolutePath': list(validation_error.absolute_path),                   
                     }

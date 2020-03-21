@@ -43,7 +43,7 @@ class BlogsAuthBackend(object):
             logger.exception(ex)
             return None
     
-    # this method is used anywhere becuase we are not using session based authentication
+    # this method is used anywhere because we are not using session based authentication
     def get_user(self, auth_id):
         try:
             user = BlogsAuth.objects.get(auth_id=auth_id)

@@ -11,3 +11,6 @@ class Teams:
 class LoginType:
     EMAIL = 'EMAIL'
     PHONE = 'PHONE'
+    
+class UpdateCredentialsType(LoginType):
+    PASSWORD = 'PASSWORD'
