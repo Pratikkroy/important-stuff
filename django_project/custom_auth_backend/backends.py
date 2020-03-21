@@ -12,31 +12,6 @@ logger = Logger()
 # https://stackoverflow.com/a/59442029
 
 class BlogsAuthBackend(object):
-    # def authenticate(self, request, email, login_id_type, login_id, password):
-    #     # login_id could be email or phone
-    #     try:
-    #         if login_id_type == LoginIdType.EMAIL:
-    #             users = BlogsAuth.objects.filter(email=login_id)
-    #         else:
-    #             users = BlogsAuth.objects.filter(phone=login_id)
-    #         if users.count() == 0:
-    #             logger.error("user with login {} does not exists ".format(login_id))
-    #             return HttpResponse(http_status=HttpStatus.HTTP_401_UNAUTHORIZED,
-    #                 data="EMAIL_PHONE_DOES_NOT_EXIST")
-    #         elif users.count() == 1:
-    #             user = users[0]
-    #             if user.check_password(password):
-    #                 return user
-    #             else:
-    #                 return HttpResponse(http_status=HttpStatus.HTTP_401_UNAUTHORIZED,
-    #                     data="PASSWORD_INCORRECT")
-    #         else:
-    #             logger.error("More than one user with login {} exists ".format(login_id))
-    #             return HttpResponse(http_status=HttpStatus.HTTP_401_UNAUTHORIZED,
-    #                     data="MORE_THAN_ONE_USER_EXIST")      
-    #     except Exception as ex:
-    #         logger.exception(ex)
-    #         return None
 
     # do not change the params. this authenticate method would not called
     def authenticate(self, request, auth_id, password):
@@ -68,7 +43,7 @@ class BlogsAuthBackend(object):
             logger.exception(ex)
             return None
     
-    
+    # this method is used anywhere becuase we are not using session based authentication
     def get_user(self, auth_id):
         try:
             user = BlogsAuth.objects.get(auth_id=auth_id)
@@ -78,7 +53,4 @@ class BlogsAuthBackend(object):
                         data="USER_INACTIVE")
         except BlogsAuth.DoesNotExist:
             logger.error("user with auth_id {} not found".format(auth_id))
-            return None
-        
-    
-    
+            return None   
