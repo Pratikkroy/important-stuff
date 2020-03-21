@@ -60,7 +60,8 @@ class Register(APIView):
     def sanitize_request_data(self, data):
         data['email'].lower().strip()
         data['name']['first'].strip()
-        data['name']['last'].strip()
+        if data['name'].get('last'):
+            data['name']['last'].strip()
     
        
     def create_user_entry_in_auth_user(self, auth_obj, name, group, team=None):
