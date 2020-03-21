@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from django.utils.decorators import decorator_from_middleware_with_args
 from src.utils import HttpStatus, HttpResponse, MethodNotAllowedException, Utility, DateTime, Logger
 from src.constants import UserStatus, UserGroups, Teams
-from middlewares.validator import RequestBodyValidatorMiddleware
+from custom_middlewares.validator import RequestBodyValidatorMiddleware
 from apps.json_schema_validators import register_json_schema
 from apps.serializers import BlogsAuthSerializer
 from apps.models import BlogsAuthUser, BlogsAuth
