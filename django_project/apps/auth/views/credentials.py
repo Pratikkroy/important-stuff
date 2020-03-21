@@ -6,6 +6,8 @@ from apps.models import BlogsAuth
 from apps.serializers import BlogsAuthSerializer
 from custom_middlewares.validator import RequestBodyValidatorMiddleware
 from apps.json_schema_validators import update_credentials_json_schema
+from . import AuthServices
+
 
 logger = Logger()
 update_credentials_params_validator = decorator_from_middleware_with_args(RequestBodyValidatorMiddleware)
@@ -42,13 +44,9 @@ class Credentials(APIView):
         
     
     def update_credentials(self, auth_id, type, updated_data):
-        try:
-            auth_obj = BlogsAuth.objects.get(auth_id=auth_id)
-        except BlogsAuth.DoesNotExist:
-            return HttpResponse(
-                http_status=HttpStatus.HTTP_403_FORBIDDEN,
-                data='AUTH_ID_DOES_NOT_EXIST'
-            )
+        auth_obj = AuthServices.get_auth_obj(auth_id)
+        if isinstance(auth_obj, HttpResponse):
+            return auth_obj
         else:
             serializer = BlogsAuthSerializer(
                 auth_obj,
