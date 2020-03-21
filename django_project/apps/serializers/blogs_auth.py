@@ -1,6 +1,8 @@
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from ..models import BlogsAuth
+from src.utils import HttpStatus, HttpResponse
+from src.constants import UserStatus
 
 class BlogsAuthSerializer(serializers.ModelSerializer):
     class Meta:
@@ -28,6 +30,16 @@ class BlogsAuthSerializer(serializers.ModelSerializer):
         # it is already checked checked when the serializer object is created
         return data
     
+    def validate_status(self, status):
+        if status not in dir(UserStatus):
+            raise serializers.ValidationError("INVALID_STATUS")
+        return status
+    
+    def validate_is_staff(self, is_staff):
+        if is_staff not in [0,1]:
+            raise serializers.ValidationError("INVALID_IS_STAFF")
+        return is_staff
+    
     # override create method. create_user method hash the password. create method doesn't'
     # unable to override create_user method so hashing the password
     def create(self, validated_data):
@@ -45,3 +57,13 @@ class BlogsAuthSerializer(serializers.ModelSerializer):
             setattr(instance,key,val)
         instance.save()
         return instance
+    
+    @staticmethod
+    def check_auth_id(auth_id):
+        try:
+            auth_obj = BlogsAuth.objects.get(auth_id=auth_id)
+        except BlogsAuth.DoesNotExist:
+            return HttpResponse(
+                http_status=HttpStatus.HTTP_403_FORBIDDEN,
+                data='AUTH_ID_DOES_NOT_EXIST'
+            )
