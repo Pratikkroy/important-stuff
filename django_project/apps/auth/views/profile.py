@@ -1,5 +1,4 @@
 from rest_framework.views import APIView
-from django.utils.decorators import decorator_from_middleware_with_args
 from django.contrib.auth import authenticate, login
 from src.utils import HttpStatus, HttpResponse, MethodNotAllowedException, Logger
 from apps.models import BlogsAuth, BlogsAuthUser

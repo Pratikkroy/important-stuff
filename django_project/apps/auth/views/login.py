@@ -1,15 +1,15 @@
 from rest_framework.views import APIView
-from django.utils.decorators import decorator_from_middleware_with_args
+from custom_decoraters.request_body_validator import request_body_validator
 from django.contrib.auth import authenticate, login
 from src.utils import HttpStatus, HttpResponse, MethodNotAllowedException, Logger
 from src.constants import LoginType
 from apps.models import BlogsAuth
 from custom_middlewares.validator import RequestBodyValidatorMiddleware
+from custom_decoraters import request_body_validator
 from apps.json_schema_validators import login_json_schema
 from custom_auth_backend.jwt.token import Token
 
 logger = Logger()
-login_params_validator = decorator_from_middleware_with_args(RequestBodyValidatorMiddleware)
 
 class Login(APIView):
 
@@ -18,7 +18,7 @@ class Login(APIView):
             data="Kept only for testing using drf view")
         
     
-    @login_params_validator(login_json_schema)
+    @request_body_validator(login_json_schema)
     def post(self, request):
         self.sanitize_request_data(request.data)
         auth_obj = authenticate(request, auth_id="", password=request.data['password'])

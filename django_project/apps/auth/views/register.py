@@ -1,14 +1,13 @@
 from rest_framework.views import APIView
-from django.utils.decorators import decorator_from_middleware_with_args
 from src.utils import HttpStatus, HttpResponse, MethodNotAllowedException, Utility, DateTime, Logger
 from src.constants import UserStatus, UserGroups, Teams
 from custom_middlewares.validator import RequestBodyValidatorMiddleware
+from custom_decoraters.request_body_validator import request_body_validator
 from apps.json_schema_validators import register_json_schema
 from apps.serializers import BlogsAuthSerializer, BlogsAuthUserSerializer
 from apps.models import BlogsAuthUser, BlogsAuth
 
 logger = Logger()
-register_params_validator = decorator_from_middleware_with_args(RequestBodyValidatorMiddleware)
 
 
 class Register(APIView):
@@ -21,7 +20,7 @@ class Register(APIView):
             data="Kept only for testing using drf view")
     
     
-    @register_params_validator(register_json_schema)
+    @request_body_validator(register_json_schema)
     def post(self, request):
         self.sanitize_request_data(request.data)
         is_staff= 1 if request.data['isAdmin'] else 0

@@ -1,20 +1,19 @@
 from rest_framework.views import APIView
-from django.utils.decorators import decorator_from_middleware_with_args
 from src.utils import HttpStatus, HttpResponse, Logger
 from src.constants import UpdateCredentialsType
 from apps.models import BlogsAuth
 from apps.serializers import BlogsAuthSerializer
 from custom_middlewares.validator import RequestBodyValidatorMiddleware
+from custom_decoraters.request_body_validator import request_body_validator
 from apps.json_schema_validators import update_credentials_json_schema
 from . import AuthServices
 
 
 logger = Logger()
-update_credentials_params_validator = decorator_from_middleware_with_args(RequestBodyValidatorMiddleware)
 
 class Credentials(APIView):
     
-    @update_credentials_params_validator(update_credentials_json_schema)
+    @request_body_validator(update_credentials_json_schema)
     def post(self, request):
         data = request.data
         if len(data) != 1:
