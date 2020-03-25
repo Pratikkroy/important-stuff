@@ -59,7 +59,6 @@ export default class HomePage extends Component {
   }
 
   onSearchInputTextChange(){
-    console.log(this.state.searchTextInputValue);
 
     if(this.state.searchTextInputValue.trim().length==0){
       this.setState({filteredCallHistoryArr:this.state.callHistoryArr})
@@ -78,7 +77,6 @@ export default class HomePage extends Component {
 
   createCallHistory(){
     ManageCallLogs.getAll().then(data => {
-      console.log("data", data)
       let callHistoryObj = new CallHistory(data);
       let callHistoryArr = callHistoryObj.getCallHistoryArray();
       this.setState({
