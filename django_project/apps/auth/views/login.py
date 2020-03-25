@@ -16,8 +16,7 @@ class Login(APIView):
     def get(self, request):
         return HttpResponse(http_status=HttpStatus.HTTP_200_OK,
             data="Kept only for testing using drf view")
-        
-    
+           
     @request_body_validator(login_json_schema)
     def post(self, request):
         self.sanitize_request_data(request.data)

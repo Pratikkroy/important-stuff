@@ -10,6 +10,9 @@ const styles = StyleSheet.create({
     width: wp(100),
     paddingHorizontal: wp(5),
     paddingVertical: hp(1),
+    borderLeftWidth: 5,
+    borderBottomWidth: 5,
+    borderColor: COLORS.GRAY,
   },
   left: {
     flex: 1,
@@ -24,9 +27,11 @@ const styles = StyleSheet.create({
     width: wp(100),
     flexDirection: 'row-reverse',
     justifyContent: 'flex-start',
-    backgroundColor: 'red',
   },
   nameNumberContainer: {
+  },
+  durationAndTypeContainer: {
+
   },
 });
 

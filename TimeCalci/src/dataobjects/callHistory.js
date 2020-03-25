@@ -1,7 +1,7 @@
 /* eslint-disable no-new-object */
 /* eslint-disable no-array-constructor */
 import CallLog from './callLog';
-
+import CallType from './callType';
 /**
  * CallHistory obj structure
  * CallHistory obj {
@@ -11,6 +11,8 @@ import CallLog from './callLog';
  *       name = name
  *       phoneNumber = phoneNumber
  *       duration = num
+ *       callType: {
+ *       }
  *     }
  *     ph2_str {
  *     }
@@ -20,14 +22,19 @@ import CallLog from './callLog';
 export default class CallHistory {
   constructor(callLogData) {
     this.history = new Object();
+    
+
     callLogData.map(callLog => {
       var phoneNumber = this.getPrefixAndPhoneNumber(callLog.phoneNumber);
       if (!this.history[phoneNumber.phoneNumber]) {
         let _newEntry = new Object();
+        let callType = new CallType();
+
         _newEntry.allCallsArray = new Array();
         _newEntry.name = callLog.name;
         _newEntry.phoneNumber = phoneNumber.phoneNumber;
         _newEntry.duration = 0;
+        _newEntry.callType = callType;
         this.history[phoneNumber.phoneNumber] = _newEntry;
       }
       this.history[phoneNumber.phoneNumber].allCallsArray.push(
@@ -42,6 +49,24 @@ export default class CallHistory {
         ),
       );
       this.history[phoneNumber.phoneNumber].duration += callLog.duration;
+      
+      switch(callLog.rawType){
+        case 1:
+          this.history[phoneNumber.phoneNumber].callType.INCOMING += 1;
+          break;
+        case 2:
+          if(callLog.duration === 0){
+            this.history[phoneNumber.phoneNumber].callType.NOT_ANSWERED += 1;
+          } else {
+            this.history[phoneNumber.phoneNumber].callType.OUTGOING += 1;
+          }
+          break;
+        case 3: 
+          this.history[phoneNumber.phoneNumber].callType.MISSED += 1;
+          break;
+        default: 
+          this.history[phoneNumber.phoneNumber].callType.UNKNOWN += 1;
+      }
     });
   }
 

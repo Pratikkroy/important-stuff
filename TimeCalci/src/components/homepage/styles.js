@@ -14,12 +14,22 @@ const styles = StyleSheet.create({
   searchBar: {
     height: hp(searchBarHeight),
     width: wp(100),
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   searchResults: {
     height: hp(searchResultsHeight),
     width: wp(100),
   },
   callHistoryComponent: {
+  },
+  searchTextInput: {
+    height: hp(5), 
+    width: wp(60),
+    
+    
+    borderColor: COLORS.GRAY, 
+    borderWidth: 1
   },
 });
 

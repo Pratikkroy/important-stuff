@@ -9,6 +9,7 @@ export default class CallHistoryComponent extends Component {
       name: props.name,
       phoneNumber: props.phoneNumber,
       duration: props.duration,
+      callType: props.callType,
     };
   }
 
@@ -16,7 +17,7 @@ export default class CallHistoryComponent extends Component {
     return (
       <View style={[styles.container, this.props.style]}>
         <View style={styles.left}>
-          <View>
+          <View style={styles.nameNumberContainer}>
             {this.state.name != null ? (
               <Text>{this.state.name}</Text>
             ) : (
@@ -26,7 +27,18 @@ export default class CallHistoryComponent extends Component {
           </View>
         </View>
         <View style={styles.right}>
-          <Text>Duration-{this.state.duration}</Text>
+          <View style={styles.durationAndTypeContainer}>
+            <Text>Duration-{this.state.duration}</Text>
+            <Text>
+              I-{this.state.callType.INCOMING}    O-{this.state.callType.OUTGOING} 
+            </Text>
+            <Text>
+              M-{this.state.callType.MISSED}      NA-{this.state.callType.NOT_ANSWERED}
+            </Text>
+            <Text>
+              U-{this.state.callType.UNKNOWN}
+            </Text>
+          </View>
         </View>
       </View>
     );

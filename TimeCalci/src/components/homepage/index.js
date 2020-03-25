@@ -5,6 +5,7 @@ import {
   FlatList,
   View,
   Text,
+  TextInput,
   PermissionsAndroid,
   BackHandler,
   Alert,
@@ -12,7 +13,7 @@ import {
 import ManageCallLogs from 'react-native-manage-call-logs';
 import CallHistory from '../../dataobjects/callHistory';
 import CallHistoryComponent from '../common/callHistoryComponent/index';
-
+import SearchService from './services';
 import styles from './styles';
 
 export default class HomePage extends Component {
@@ -20,8 +21,15 @@ export default class HomePage extends Component {
   state = {
     isReadCallLogsPermissionGiven: false,
     callHistoryObj: null,
-    callHistoryArr: null
+    callHistoryArr: null,
+    filteredCallHistoryArr: null,
+    searchTextInputValue: ''
   };
+
+  constructor(props) {
+    super(props);
+    this.searchService = new SearchService();
+  }
 
   // class helper methods
   async askReadCallLogsPermission(){
@@ -50,23 +58,44 @@ export default class HomePage extends Component {
     BackHandler.exitApp();
   }
 
+  onSearchInputTextChange(){
+    console.log(this.state.searchTextInputValue);
+
+    if(this.state.searchTextInputValue.trim().length==0){
+      this.setState({filteredCallHistoryArr:this.state.callHistoryArr})
+    } else if(!isNaN(this.state.searchTextInputValue.trim().charAt(0).toString())){
+      this.setState(
+        {filteredCallHistoryArr:this.searchService.searchByNumber(this.state.callHistoryArr,this.state.searchTextInputValue) }
+      );
+    }
+    else {
+      this.setState(
+        {filteredCallHistoryArr:this.searchService.searchByName(this.state.callHistoryArr,this.state.searchTextInputValue) }
+      );
+    }
+
+  }
+
   createCallHistory(){
     ManageCallLogs.getAll().then(data => {
-      console.log(data);
+      console.log("data", data)
       let callHistoryObj = new CallHistory(data);
+      let callHistoryArr = callHistoryObj.getCallHistoryArray();
       this.setState({
         callHistoryObj: callHistoryObj,
-        callHistoryArr: callHistoryObj.getCallHistoryArray(),
+        callHistoryArr: callHistoryArr,
+        filteredCallHistoryArr: callHistoryArr
       });
     });
   }
 
-  renderCallHistoryComponent(name, phoneNumber, duration){
+  renderCallHistoryComponent(name, phoneNumber, duration, callType){
     return (
       <CallHistoryComponent
         name={name}
         phoneNumber={phoneNumber}
         duration={duration}
+        callType={callType}
         style={styles.callHistoryComponent}
       />
     );
@@ -92,18 +121,28 @@ export default class HomePage extends Component {
   }
 
   render() {
-    console.log("render",this.state.callHistoryObj);
     return (
       <View style={styles.container}>
         <View style={styles.searchBar}>
-          <Text>Hello World search bar</Text>
+        
+          <TextInput
+            style={styles.searchTextInput}
+            onChangeText={(text) => {
+              this.state.searchTextInputValue = text;
+              this.setState({searchTextInputValue:text});
+              this.onSearchInputTextChange(); 
+              }
+            }
+            value={this.state.searchTextInputValue}
+          />
+        
         </View>
         <View style={styles.searchResults}>
           {this.state.callHistoryObj != null ? (
             <SafeAreaView>
               <FlatList
-                data={this.state.callHistoryArr}
-                renderItem={({ item }) => this.renderCallHistoryComponent(item.name, item.phoneNumber, item.duration)}
+                data={this.state.filteredCallHistoryArr}
+                renderItem={({ item }) => this.renderCallHistoryComponent(item.name, item.phoneNumber, item.duration, item.callType)}
                 extraData={this.state}
                 keyExtractor={item => item.phoneNumber}
               />
