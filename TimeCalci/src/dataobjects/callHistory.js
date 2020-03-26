@@ -2,6 +2,7 @@
 /* eslint-disable no-array-constructor */
 import CallLog from './callLog';
 import CallType from './callType';
+import {blockedContacts} from '../config/blockedContacts';
 /**
  * CallHistory obj structure
  * CallHistory obj {
@@ -20,10 +21,12 @@ import CallType from './callType';
  * }
  * */
 export default class CallHistory {
+
   constructor(callLogData) {
     this.history = new Object();
     
-
+    // adding map(js obj) of call history with 
+    // phoneNumber as key
     callLogData.map(callLog => {
       var phoneNumber = this.getPrefixAndPhoneNumber(callLog.phoneNumber);
       if (!this.history[phoneNumber.phoneNumber]) {
@@ -66,6 +69,15 @@ export default class CallHistory {
           break;
         default: 
           this.history[phoneNumber.phoneNumber].callType.UNKNOWN += 1;
+      }
+    });
+
+    // removing blocked contacts
+    blockedContacts.map(contact => {
+      // console.log("deleting contact")
+
+      if(this.history[contact]){
+        delete this.history[contact];
       }
     });
   }

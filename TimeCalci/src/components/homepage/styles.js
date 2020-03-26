@@ -16,6 +16,8 @@ const styles = StyleSheet.create({
     width: wp(100),
     justifyContent: 'center',
     alignItems: 'center',
+    borderBottomWidth: 2,
+    borderColor: COLORS.BLACK,
   },
   searchResults: {
     height: hp(searchResultsHeight),

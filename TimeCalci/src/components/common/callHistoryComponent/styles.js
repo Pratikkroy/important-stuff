@@ -4,33 +4,48 @@ import {COLORS} from '../../../constants/colors';
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    backgroundColor: COLORS.DEFAULT_BACKGROUND_COLOR,
-    height: hp(10),
-    width: wp(100),
-    paddingHorizontal: wp(5),
-    paddingVertical: hp(1),
-    borderLeftWidth: 5,
-    borderBottomWidth: 5,
+    height: hp(13),
+    borderWidth: 0,
     borderColor: COLORS.GRAY,
+    margin:10,
+    backgroundColor: COLORS.DEFAULT_BACKGROUND_COLOR,
   },
-  left: {
-    flex: 1,
-    height: hp(100),
-    width: wp(50),
+  top: {
+    height: hp(3),
+    paddingHorizontal: wp(5),
+    justifyContent: 'flex-end',
+
+  },
+  durationStr: {
+    fontWeight: 'bold'
+  },
+  mid: {
+    height: hp(6),
+    paddingHorizontal: wp(5),
     flexDirection: 'row',
-    justifyContent: 'flex-start',
   },
-  right: {
-    flex: 1,
-    height: hp(100),
-    width: wp(100),
-    flexDirection: 'row-reverse',
-    justifyContent: 'flex-start',
+  midLeft: {
+    height: hp(6),
+    width: wp(45),
+    justifyContent: 'center',
+  },
+  midRight: {
+    height: hp(6),
+    width: wp(45),
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  bottom: {
+    height: hp(4),
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    backgroundColor: COLORS.LIGHT_GRAY,
   },
   nameNumberContainer: {
   },
-  durationAndTypeContainer: {
+  durationContainer: {
 
   },
 });

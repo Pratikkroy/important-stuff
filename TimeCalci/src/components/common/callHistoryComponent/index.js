@@ -1,44 +1,64 @@
 import React, {Component} from 'react';
 import {View, Text} from 'react-native';
 import styles from './styles';
+import DateTime from '../../../utils/datetime';
 
 export default class CallHistoryComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      durationStr: props.durationStr?props.durationStr:'Total',
       name: props.name,
       phoneNumber: props.phoneNumber,
-      duration: props.duration,
+      duration: DateTime.convertSecondsToMinutes(props.duration),
       callType: props.callType,
     };
   }
 
+  
   render() {
     return (
       <View style={[styles.container, this.props.style]}>
-        <View style={styles.left}>
-          <View style={styles.nameNumberContainer}>
+        <View style={styles.top}>
+          <Text style={styles.durationStr}>{this.state.durationStr}</Text>
+        </View>
+        
+        <View style={styles.mid}>
+          <View style={styles.midLeft}>
             {this.state.name != null ? (
               <Text>{this.state.name}</Text>
             ) : (
-              <Text />
+              <View />
             )}
             <Text>{this.state.phoneNumber}</Text>
           </View>
-        </View>
-        <View style={styles.right}>
-          <View style={styles.durationAndTypeContainer}>
-            <Text>Duration-{this.state.duration}</Text>
-            <Text>
-              I-{this.state.callType.INCOMING}    O-{this.state.callType.OUTGOING} 
-            </Text>
-            <Text>
-              M-{this.state.callType.MISSED}      NA-{this.state.callType.NOT_ANSWERED}
-            </Text>
-            <Text>
-              U-{this.state.callType.UNKNOWN}
-            </Text>
+          <View style={styles.midRight}>
+            <Text>Duration-{this.state.duration.minutes}m</Text>
+            <Text> </Text>
+            {this.state.duration.seconds!=0?
+              (<Text>
+                {this.state.duration.seconds}s
+              </Text>)
+              :(<View/>)
+            }
           </View>
+        </View>
+        <View style={styles.bottom}>
+          <Text>
+            I-{this.state.callType.INCOMING}    
+          </Text>
+          <Text>
+            O-{this.state.callType.OUTGOING}
+          </Text>
+          <Text>
+            M-{this.state.callType.MISSED}
+          </Text>
+          <Text>
+            NA-{this.state.callType.NOT_ANSWERED}
+          </Text>
+          <Text>
+            U-{this.state.callType.UNKNOWN}
+          </Text>
         </View>
       </View>
     );
