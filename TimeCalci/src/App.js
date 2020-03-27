@@ -27,6 +27,7 @@ import {
 import HomePage from './components/homepage/index.js';
 
 const App: () => React$Node = () => {
+  console.reportErrorsAsExceptions = false;
   return (
     <View>
       <StatusBar barStyle="dark-content" />
