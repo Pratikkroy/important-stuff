@@ -95,6 +95,7 @@ export default class HomePage extends Component {
         duration={duration}
         callType={callType}
         style={styles.callHistoryComponent}
+        isTouchable={true}
       />
     );
   }
