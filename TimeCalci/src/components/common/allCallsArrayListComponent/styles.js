@@ -4,20 +4,26 @@ import {COLORS} from '../../../constants/colors';
 
 const styles = StyleSheet.create({
   container: {
-    height: hp(10),
-    borderWidth: 0,
-    borderColor: COLORS.GRAY,
-    margin:10,
+    width: wp(100),
+    flexDirection: 'column',
+  },
+  nameNumberBar: {
+    height: hp(20),
+    width: wp(100),
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomWidth: 2,
+    borderColor: COLORS.BLACK,
+  },
+  allCallsArrayListBar: {
+    height: hp(70),
+    width: wp(100),
     backgroundColor: COLORS.DEFAULT_BACKGROUND_COLOR,
   },
   top: {
     height: hp(0),
     paddingHorizontal: wp(5),
     justifyContent: 'flex-end',
-
-  },
-  durationStr: {
-    fontWeight: 'bold'
   },
   mid: {
     height: hp(6),
@@ -42,11 +48,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     backgroundColor: COLORS.LIGHT_GRAY,
-  },
-  nameNumberContainer: {
-  },
-  durationContainer: {
-
   },
 });
 

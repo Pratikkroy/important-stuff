@@ -1,8 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
 import {
-  SafeAreaView,
-  FlatList,
   View,
   Text,
   TextInput,
@@ -12,11 +10,11 @@ import {
 } from 'react-native';
 import ManageCallLogs from 'react-native-manage-call-logs';
 import CallHistory from '../../dataobjects/callHistory';
-import CallHistoryComponent from '../common/callHistoryComponent/index';
+import CallHistoryListComponent from '../common/callHistoryListComponent/index';
 import SearchService from './services';
 import styles from './styles';
 
-export default class HomePage extends Component {
+export default class Homepage extends Component {
 
   state = {
     isReadCallLogsPermissionGiven: false,
@@ -28,6 +26,8 @@ export default class HomePage extends Component {
 
   constructor(props) {
     super(props);
+    this.state.navigation = props.navigation;
+    this.state.isTouchable = props.isTouchable?props.isTouchable:false;
     this.searchService = new SearchService();
   }
 
@@ -87,19 +87,6 @@ export default class HomePage extends Component {
     });
   }
 
-  renderCallHistoryComponent(name, phoneNumber, duration, callType){
-    return (
-      <CallHistoryComponent
-        name={name}
-        phoneNumber={phoneNumber}
-        duration={duration}
-        callType={callType}
-        style={styles.callHistoryComponent}
-        isTouchable={true}
-      />
-    );
-  }
-
   // lifecycle methods
   async componentDidMount(){
     this.askReadCallLogsPermission().then(
@@ -120,6 +107,7 @@ export default class HomePage extends Component {
   }
 
   render() {
+    
     return (
       <View style={styles.container}>
         <View style={styles.searchBar}>
@@ -138,14 +126,12 @@ export default class HomePage extends Component {
         </View>
         <View style={styles.searchResults}>
           {this.state.callHistoryObj != null ? (
-            <SafeAreaView>
-              <FlatList
-                data={this.state.filteredCallHistoryArr}
-                renderItem={({ item }) => this.renderCallHistoryComponent(item.name, item.phoneNumber, item.duration, item.callType)}
-                extraData={this.state}
-                keyExtractor={item => item.phoneNumber}
-              />
-            </SafeAreaView>
+            <CallHistoryListComponent
+              navigation={this.state.navigation}
+              filteredCallHistoryArr={this.state.filteredCallHistoryArr}
+              isTouchable={true}
+            />
+            
           ):(
             <View>
               <Text/>

@@ -4,47 +4,25 @@ import styles from './styles';
 import DateTime from '../../../utils/datetime';
 import Details from '../../details/index';
 
-export default class CallHistoryComponent extends Component {
+export default class AllCallsComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: props.name,
-      phoneNumber: props.phoneNumber,
+      key: props.keys,
       duration: DateTime.convertSecondsToMinutes(props.duration),
-      callType: props.callType,
-      allCallsArray: props.allCallsArray,
-      isTouchable: props.isTouchable,
-      navigation: props.navigation?props.navigation:null,
+      callType: props.callType
     };
-  }
-
-  onSelect(){
-    if(this.state.isTouchable){
-      this.state.navigation.push('Details', {
-        allCallsArray: this.state.allCallsArray,
-        name: this.state.name,
-        phoneNumber: this.state.phoneNumber,
-      });
-    }
-    
   }
   
   render() {
     return (
-      <TouchableOpacity
-        onPress={() => this.onSelect()}>
+      
         <View style={[styles.container, this.props.style]}>
           <View style={styles.top}>
           </View>
-          
           <View style={styles.mid}>
             <View style={styles.midLeft}>
-              {this.state.name != null ? (
-                <Text>{this.state.name}</Text>
-              ) : (
-                <View />
-              )}
-              <Text>{this.state.phoneNumber}</Text>
+              <Text>{this.state.key}</Text>
             </View>
             <View style={styles.midRight}>
               <Text>Duration-{this.state.duration.minutes}m</Text>
@@ -75,7 +53,6 @@ export default class CallHistoryComponent extends Component {
             </Text>
           </View>
         </View>
-      </TouchableOpacity>  
     );
   }
 }

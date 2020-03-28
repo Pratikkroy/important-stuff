@@ -46,6 +46,7 @@ export default class CallHistory {
           phoneNumber.phoneNumber,
           phoneNumber.prefix,
           callLog.type,
+          callLog.rawType,
           callLog.duration,
           callLog.timestamp,
           callLog.dateTime,
@@ -53,23 +54,7 @@ export default class CallHistory {
       );
       this.history[phoneNumber.phoneNumber].duration += callLog.duration;
       
-      switch(callLog.rawType){
-        case 1:
-          this.history[phoneNumber.phoneNumber].callType.INCOMING += 1;
-          break;
-        case 2:
-          if(callLog.duration === 0){
-            this.history[phoneNumber.phoneNumber].callType.NOT_ANSWERED += 1;
-          } else {
-            this.history[phoneNumber.phoneNumber].callType.OUTGOING += 1;
-          }
-          break;
-        case 3: 
-          this.history[phoneNumber.phoneNumber].callType.MISSED += 1;
-          break;
-        default: 
-          this.history[phoneNumber.phoneNumber].callType.UNKNOWN += 1;
-      }
+      CallType.updateCallType(this.history[phoneNumber.phoneNumber],callLog);
     });
 
     // removing blocked contacts

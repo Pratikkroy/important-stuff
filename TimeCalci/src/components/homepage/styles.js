@@ -3,7 +3,7 @@ import {wp, hp} from '../../utils/percentagesToDP';
 import {COLORS} from '../../constants/colors';
 
 const searchBarHeight = 20;
-const searchResultsHeight = 100 - searchBarHeight;
+const searchResultsHeight = 100 - searchBarHeight - 5;
 
 const styles = StyleSheet.create({
   container: {
