@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { TabView, SceneMap, TabViewPage, TabViewAnimated } from 'react-native-tab-view';
-import Daily from './daily';
+import Day from './day';
 import Week from './week';
 import Month from './month';
 import Year from './year';
 
-const DailyRoute = (data) => (
-    <Daily name={data.name} phoneNumber={data.phoneNumber} allCallsArray={data.allCallsArray} />
+const DayRoute = (data) => (
+    <Day name={data.name} phoneNumber={data.phoneNumber} allCallsArray={data.allCallsArray} />
 );
 
 const WeekRoute = (data) => (
@@ -47,7 +47,7 @@ export default class Details extends Component {
             allCallsArray: props.route.params.allCallsArray
         };
         this.state.routes = {
-            daily: DailyRoute(data),
+            daily: DayRoute(data),
             week: WeekRoute(data),
             month: MonthRoute(data),
             year: YearRoute(data),

@@ -6,7 +6,7 @@ import CallGrouping from '../../dataobjects/callGrouping'
 import {CALL_GROUPING_TYPE} from '../../constants/callGroupingType';
 import CallType from '../../dataobjects/callType';
 
-export default class Daily extends Component {
+export default class Day extends Component {
     
     state = {};
     constructor(props) {
@@ -17,12 +17,12 @@ export default class Daily extends Component {
     }
 
     getDayWiseAllCallsArray(allCallsArray){
-        let dayWiseAllCallsObj = new Array();
+        let dayWiseAllCallsObj = {};
         allCallsArray.forEach(element => {
             let key = element.dateTime.split(" ")[0];
             if(!dayWiseAllCallsObj[key]){
                 dayWiseAllCallsObj[key] = new CallGrouping({
-                    groupingType: CALL_GROUPING_TYPE.DAILY,
+                    groupingType: CALL_GROUPING_TYPE.DAY,
                     key: key
                 });
             }

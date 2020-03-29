@@ -1,5 +1,5 @@
 const callGroupingType = {
-    DAILY: 'DAILY',
+    DAILY: 'DAY',
     WEEK: 'WEEK',
     MONTH: 'MONTH',
     YEAR: 'YEAR'    

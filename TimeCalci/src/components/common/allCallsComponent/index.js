@@ -13,6 +13,23 @@ export default class AllCallsComponent extends Component {
       callType: props.callType
     };
   }
+
+  renderKey(){
+    let text = this.state.key.split("__");
+    if(text.length==1){
+      return(
+        <Text>{this.state.key}</Text>
+      );
+    } 
+    else {
+      return (
+        <View>
+          <Text>{text[0]}</Text>
+          <Text>{text[1]}</Text>
+        </View>
+      )
+    }
+  }
   
   render() {
     return (
@@ -22,7 +39,7 @@ export default class AllCallsComponent extends Component {
           </View>
           <View style={styles.mid}>
             <View style={styles.midLeft}>
-              <Text>{this.state.key}</Text>
+              {this.renderKey()}
             </View>
             <View style={styles.midRight}>
               <Text>Duration-{this.state.duration.minutes}m</Text>

@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   allCallsArrayListBar: {
     height: hp(70),
     width: wp(100),
-    backgroundColor: COLORS.DEFAULT_BACKGROUND_COLOR,
+    // backgroundColor: COLORS.DEFAULT_BACKGROUND_COLOR,
   },
   top: {
     height: hp(0),
