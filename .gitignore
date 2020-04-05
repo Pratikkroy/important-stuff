@@ -5,6 +5,7 @@ target
 .aws-sam/
 .idea
 *.apk
+*.hprof
 
 # Logs
 logs/
