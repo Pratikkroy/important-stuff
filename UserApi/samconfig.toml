@@ -1,0 +1,10 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "UserApi"
+s3_bucket = "com.pratik.test.bucket"
+s3_prefix = "user-api/cfn-template"
+region = "ap-south-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"

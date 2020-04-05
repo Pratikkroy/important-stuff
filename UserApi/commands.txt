@@ -1,0 +1,7 @@
+sam build
+sam start-api
+sam local invoke
+sam package --s3-bucket "com.pratik.test.bucket" --s3-prefix "user-api/jars" --profile default --region ap-south-1
+sam deploy --stack-name "UserApi" --s3-bucket "com.pratik.test.bucket" --s3-prefix "user-api/cfn-template" --profile default --region ap-south-1
+sam deploy --guided
+sam deploy
