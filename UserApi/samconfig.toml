@@ -3,8 +3,11 @@ version = 0.1
 [default.deploy]
 [default.deploy.parameters]
 stack_name = "UserApi"
-s3_bucket = "com.pratik.test.bucket"
-s3_prefix = "user-api/cfn-template"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-ktq56jeti5by"
+s3_prefix = "UserApi"
 region = "ap-south-1"
+profile = "default"
 confirm_changeset = true
-capabilities = "CAPABILITY_IAM"
+capabilities = "CAPABILITY_NAMED_IAM"
+parameter_overrides = "DaciaServicePrincipalSuffix=\"dacia_aws_internal\""
+

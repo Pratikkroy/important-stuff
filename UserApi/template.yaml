@@ -10,6 +10,11 @@ Globals:
   Function:
     Timeout: 20
 
+Parameters:
+  DaciaServicePrincipalSuffix:
+    Type: String
+    Default: 'dacia_aws_internal'
+
 Resources:
   UserApiFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -18,7 +23,7 @@ Resources:
       CodeUri: UserApi #UserApi
       Handler: com.awslambda.handlers.UserApiHandler::handleRequest
       Runtime: java8
-      Role: arn:aws:iam::953636143786:role/DyamoDBFullAccessRoleInLambda
+      Role: arn:aws:iam::255569780290:role/DyamoDBFullAccessRoleInLambda
       MemorySize: 512
       Events:
         UserPostApiGatewayEvent:
@@ -46,7 +51,69 @@ Resources:
             Path: /user/{userId}/history/
             Method: GET
 
+  # SQS to receive schedules
+  ScheduleReceivingQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Join
+                   - "-"
+                   - - !Ref "AWS::Region"
+                     - !Ref DaciaServicePrincipalSuffix
+                     - "ScheduleReceivingQueue"
+      MessageRetentionPeriod: 1209600
+      ReceiveMessageWaitTimeSeconds: 20
+      VisibilityTimeout: 60
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt
+          - "ScheduleReceivingQueueDLQ"
+          - "Arn"
+        maxReceiveCount: 5
 
+  # DLQ configuration for ScheduleReceivingQueue
+  ScheduleReceivingQueueDLQ:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "ScheduleReceivingQueueDLQ"
+      MessageRetentionPeriod: 1209600
+
+  ScheduleReceivingQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      Queues:
+        - !Ref ScheduleReceivingQueue
+      PolicyDocument:
+        Statement:
+          Effect: Allow
+          Principal:
+            AWS: "*"
+            # Service: !Join [ ".", [ !Ref AWS::REGION, !Ref DaciaServicePrincipalSuffix] ]
+          Action: "sqs:*"
+          Resource:
+            - !GetAtt ScheduleReceivingQueue.Arn
+
+  SchedulerPublishAssumeRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: SchedulerPublishAssumeRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: "*"
+              # Service: !Join [ ".", [ !Ref AWS::REGION, !Ref DaciaServicePrincipalSuffix] ]
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: 'sqs-sendMessage-getQueueUrl'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'sqs:SendMessage'
+                  - 'sqs:GetQueueUrl'
+                Resource:
+                  - !GetAtt ScheduleReceivingQueue.Arn
 
   BasicAWSApiGateway:
     Type: AWS::Serverless::Api
