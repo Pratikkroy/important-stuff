@@ -65,7 +65,7 @@ python-dateutil==2.8.1
 python-jsonrpc-server==0.3.4
 python-language-server==0.31.7
 pytz==2019.3
-PyYAML==5.3
+PyYAML==5.4
 pyzmq==18.1.1
 redshift==0.0.1
 requests==2.22.0
